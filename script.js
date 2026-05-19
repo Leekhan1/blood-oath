@@ -2,9 +2,7 @@
 // BLOOD OATH - SCRIPT PRINCIPAL
 // ==========================================
 
-// TESTE
 
-//alert("script carregado");
 
 // ==========================================
 // LOGIN
