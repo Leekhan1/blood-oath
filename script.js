@@ -1,21 +1,8 @@
 // ==========================================
-// BLOOD OATH - SCRIPT PRINCIPAL
-// ==========================================
-
-import {
-    db,
-    ref,
-    set,
-    get,
-    onValue
-}
-from "./firebase.js";
-
-// ==========================================
 // LOGIN
 // ==========================================
 
-async function login() {
+function login() {
 
     let usuario =
         document.getElementById("login-user").value;
@@ -23,51 +10,30 @@ async function login() {
     let senha =
         document.getElementById("login-pass").value;
 
+    let usuarioSalvo =
+        localStorage.getItem("usuario");
+
+    let senhaSalva =
+        localStorage.getItem("senha");
+
     if (
-        usuario === "" ||
-        senha === ""
+        usuario === usuarioSalvo &&
+        senha === senhaSalva
     ) {
 
-        alert("Preencha todos os campos!");
+        localStorage.setItem(
+            "usuarioLogado",
+            usuario
+        );
 
-        return;
+        window.location.href =
+            "panel.html";
     }
 
-    let usuarioRef =
-        ref(db, "usuarios/" + usuario);
+    else {
 
-    let snapshot =
-        await get(usuarioRef);
-
-    if (!snapshot.exists()) {
-
-        alert("Usuário não encontrado!");
-
-        return;
+        alert("Usuário ou senha incorretos!");
     }
-
-    let dados =
-        snapshot.val();
-
-    if (dados.senha !== senha) {
-
-        alert("Senha incorreta!");
-
-        return;
-    }
-
-    localStorage.setItem(
-        "usuarioLogado",
-        usuario
-    );
-
-    localStorage.setItem(
-        "classe",
-        dados.classe
-    );
-
-    window.location.href =
-        "panel.html";
 }
 
 // ==========================================
@@ -86,7 +52,7 @@ function voltarLogin() {
         "index.html";
 }
 
-async function registrar() {
+function registrar() {
 
     let usuario =
         document.getElementById("register-user").value;
@@ -108,25 +74,20 @@ async function registrar() {
         return;
     }
 
-    let usuarioRef =
-        ref(db, "usuarios/" + usuario);
+    localStorage.setItem(
+        "usuario",
+        usuario
+    );
 
-    let snapshot =
-        await get(usuarioRef);
+    localStorage.setItem(
+        "senha",
+        senha
+    );
 
-    if (snapshot.exists()) {
-
-        alert("Usuário já existe!");
-
-        return;
-    }
-
-    await set(usuarioRef, {
-
-        usuario: usuario,
-        senha: senha,
-        classe: classe
-    });
+    localStorage.setItem(
+        "classe",
+        classe
+    );
 
     alert("Conta criada com sucesso!");
 
@@ -142,10 +103,6 @@ function logout() {
 
     localStorage.removeItem(
         "usuarioLogado"
-    );
-
-    localStorage.removeItem(
-        "classe"
     );
 
     window.location.href =
@@ -205,26 +162,22 @@ let raids = {
 
 window.onload = function () {
 
-    // PLAYER NAME
+    carregarRaid("naxx");
+    carregarRaid("ulduar");
+    carregarRaid("toc");
+    carregarRaid("icc");
+    carregarRaid("ruby");
 
     let nome =
         document.getElementById("player-name");
 
     if (nome) {
 
-        let usuario =
+        nome.innerText =
             localStorage.getItem(
                 "usuarioLogado"
             );
-
-        nome.innerText =
-            usuario || "Aventureiro";
     }
-
-    // PLAYER CLASS
-
-    let classe =
-        localStorage.getItem("classe");
 
     let classeHTML =
         document.getElementById(
@@ -235,55 +188,43 @@ window.onload = function () {
 
         classeHTML.innerText =
             "Classe Principal: " +
-            (classe || "Nenhuma");
+            localStorage.getItem(
+                "classe"
+            );
     }
-
-    // CARREGAR RAIDS
-
-    carregarRaid("naxx");
-    carregarRaid("ulduar");
-    carregarRaid("toc");
-    carregarRaid("icc");
-    carregarRaid("ruby");
 };
 
 // ==========================================
-// CARREGAR RAID FIREBASE
+// CARREGAR RAID
 // ==========================================
 
 function carregarRaid(raid) {
 
-    let raidRef =
-        ref(db, "raids/" + raid);
+    let dados =
+        localStorage.getItem(raid);
 
-    onValue(raidRef, (snapshot) => {
+    if (dados) {
 
-        if (snapshot.exists()) {
+        raids[raid] =
+            JSON.parse(dados);
+    }
 
-            raids[raid] =
-                snapshot.val();
-        }
-
-        else {
-
-            set(raidRef, raids[raid]);
-        }
-
-        atualizarRaid(raid);
-    });
+    atualizarRaid(raid);
 }
 
 // ==========================================
 // SALVAR RAID
 // ==========================================
 
-async function salvarRaid(raid) {
+function salvarRaid(raid) {
 
-    await set(
+    localStorage.setItem(
 
-        ref(db, "raids/" + raid),
+        raid,
 
-        raids[raid]
+        JSON.stringify(
+            raids[raid]
+        )
     );
 }
 
@@ -294,23 +235,17 @@ async function salvarRaid(raid) {
 function atualizarRaid(raid) {
 
     atualizarLista(
-
         raid + "-tanks",
-
         raids[raid].tanks
     );
 
     atualizarLista(
-
         raid + "-healers",
-
         raids[raid].healers
     );
 
     atualizarLista(
-
         raid + "-dps",
-
         raids[raid].dps
     );
 
@@ -327,7 +262,7 @@ function atualizarRaid(raid) {
 }
 
 // ==========================================
-// ATUALIZAR LISTA
+// LISTAS
 // ==========================================
 
 function atualizarLista(
@@ -360,7 +295,7 @@ function atualizarLista(
 // INSCREVER RAID
 // ==========================================
 
-async function inscreverRaid(raid) {
+function inscreverRaid(raid) {
 
     if (
         raids[raid].vagas >= 10
@@ -393,15 +328,13 @@ async function inscreverRaid(raid) {
 
     let role =
         prompt(
-            "Escolha sua função:\n\nTank\nHealer\nDPS"
+            "Escolha sua função:\nTank\nHealer\nDPS"
         );
 
     if (!role) return;
 
     role =
         role.toLowerCase();
-
-    // TANK
 
     if (role === "tank") {
 
@@ -421,8 +354,6 @@ async function inscreverRaid(raid) {
             .tanks
             .push(nome);
     }
-
-    // HEALER
 
     else if (
         role === "healer"
@@ -444,8 +375,6 @@ async function inscreverRaid(raid) {
             .healers
             .push(nome);
     }
-
-    // DPS
 
     else if (
         role === "dps"
@@ -483,7 +412,9 @@ async function inscreverRaid(raid) {
 
     raids[raid].vagas++;
 
-    await salvarRaid(raid);
+    atualizarRaid(raid);
+
+    salvarRaid(raid);
 
     alert(
         "Inscrição realizada!"
@@ -494,7 +425,7 @@ async function inscreverRaid(raid) {
 // CANCELAR INSCRIÇÃO
 // ==========================================
 
-async function cancelarInscricao(raid) {
+function cancelarInscricao(raid) {
 
     let nome =
         prompt(
@@ -503,66 +434,29 @@ async function cancelarInscricao(raid) {
 
     if (!nome) return;
 
-    let encontrou = false;
-
-    // REMOVER
-
-    if (
+    raids[raid].tanks =
         raids[raid]
-        .tanks.includes(nome)
-    ) {
+        .tanks.filter(
+            j => j !== nome
+        );
 
-        raids[raid].tanks =
-            raids[raid]
-            .tanks.filter(
-                j => j !== nome
-            );
-
-        encontrou = true;
-    }
-
-    if (
+    raids[raid].healers =
         raids[raid]
-        .healers.includes(nome)
-    ) {
+        .healers.filter(
+            j => j !== nome
+        );
 
-        raids[raid].healers =
-            raids[raid]
-            .healers.filter(
-                j => j !== nome
-            );
-
-        encontrou = true;
-    }
-
-    if (
+    raids[raid].dps =
         raids[raid]
-        .dps.includes(nome)
-    ) {
-
-        raids[raid].dps =
-            raids[raid]
-            .dps.filter(
-                j => j !== nome
-            );
-
-        encontrou = true;
-    }
+        .dps.filter(
+            j => j !== nome
+        );
 
     raids[raid].jogadores =
         raids[raid]
         .jogadores.filter(
             j => j !== nome
         );
-
-    if (!encontrou) {
-
-        alert(
-            "Jogador não encontrado!"
-        );
-
-        return;
-    }
 
     if (
         raids[raid].vagas > 0
@@ -571,7 +465,9 @@ async function cancelarInscricao(raid) {
         raids[raid].vagas--;
     }
 
-    await salvarRaid(raid);
+    atualizarRaid(raid);
+
+    salvarRaid(raid);
 
     alert(
         "Inscrição cancelada!"
@@ -579,7 +475,7 @@ async function cancelarInscricao(raid) {
 }
 
 // ==========================================
-// GLOBAL FUNCTIONS
+// GLOBAL
 // ==========================================
 
 window.login = login;
