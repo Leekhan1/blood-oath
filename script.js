@@ -1,666 +1,403 @@
-body {
+// ==========================================
+// BLOOD OATH - SCRIPT PRINCIPAL
+// ==========================================
 
-    margin: 0;
-    padding: 0;
+// TESTE
 
-    font-family: Arial, sans-serif;
+alert("script carregado");
 
-    min-height: 100vh;
+// ==========================================
+// LOGIN
+// ==========================================
+
+function login() {
+
+    let usuario =
+        document.getElementById("login-user").value;
+
+    let senha =
+        document.getElementById("login-pass").value;
+
+    let usuarioSalvo =
+        localStorage.getItem("usuario");
+
+    let senhaSalva =
+        localStorage.getItem("senha");
+
+    if (
+        usuario === usuarioSalvo &&
+        senha === senhaSalva
+    ) {
+
+        localStorage.setItem("logado", "true");
+
+        localStorage.setItem(
+            "usuarioLogado",
+            usuario
+        );
+
+        window.location.href = "panel.html";
+    }
+
+    else {
+
+        alert("Usuário ou senha incorretos!");
+    }
 }
 
-/* LOGIN */
+// ==========================================
+// REGISTRO
+// ==========================================
 
-.login-page {
+function irRegistro() {
 
-    background-image: url("https://i.redd.it/ckaltpt47ic11.jpg");
-
-    background-size: cover;
-
-    background-position: center;
-
-    background-repeat: no-repeat;
-
-    background-attachment: fixed;
+    window.location.href = "register.html";
 }
 
-/* REGISTER */
+function voltarLogin() {
 
-.register-page {
-
-    background-image: url("https://wallpapers.com/images/hd/world-of-warcraft-1920x1080-2c5ucluj0xae7plr.jpg");
-
-    background-size: cover;
-
-    background-position: center;
-
-    background-repeat: no-repeat;
-
-    background-attachment: fixed;
+    window.location.href = "index.html";
 }
 
-/* CLASSES */
+function registrar() {
 
-.characters-page {
+    let usuario =
+        document.getElementById("register-user").value;
 
-    background-image: url("https://c4.wallpaperflare.com/wallpaper/468/344/910/heroes-of-the-storm-lich-king-world-of-warcraft-sylvanas-windrunner-archers-dragon-undead-wallpaper-preview.jpg");
+    let senha =
+        document.getElementById("register-pass").value;
 
-    background-size: cover;
+    let classe =
+        document.getElementById("register-class").value;
 
-    background-position: center;
+    if (
+        usuario === "" ||
+        senha === "" ||
+        classe === ""
+    ) {
 
-    background-repeat: no-repeat;
+        alert("Preencha todos os campos!");
 
-    background-attachment: fixed;
+        return;
+    }
 
-    min-height: 100vh;
+    localStorage.setItem("usuario", usuario);
+
+    localStorage.setItem("senha", senha);
+
+    localStorage.setItem("classe", classe);
+
+    alert("Conta criada com sucesso!");
+
+    window.location.href = "index.html";
 }
 
-/* CONTAINER */
+// ==========================================
+// LOGOUT
+// ==========================================
 
-.container {
+function logout() {
 
-    display: flex;
+    localStorage.removeItem("logado");
 
-    flex-direction: column;
+    localStorage.removeItem("usuarioLogado");
 
-    justify-content: center;
-
-    align-items: center;
-
-    min-height: 100vh;
+    window.location.href = "index.html";
 }
 
-/* TITULO */
+// ==========================================
+// DADOS DAS RAIDS
+// ==========================================
 
-h1 {
+let raids = {
 
-    color: red;
+    naxx: {
+        vagas: 0,
+        tanks: [],
+        healers: [],
+        dps: [],
+        jogadores: []
+    },
 
-    font-size: 70px;
+    ulduar: {
+        vagas: 0,
+        tanks: [],
+        healers: [],
+        dps: [],
+        jogadores: []
+    },
 
-    text-shadow: 0px 0px 15px black;
+    toc: {
+        vagas: 0,
+        tanks: [],
+        healers: [],
+        dps: [],
+        jogadores: []
+    },
+
+    icc: {
+        vagas: 0,
+        tanks: [],
+        healers: [],
+        dps: [],
+        jogadores: []
+    },
+
+    ruby: {
+        vagas: 0,
+        tanks: [],
+        healers: [],
+        dps: [],
+        jogadores: []
+    }
+};
+
+// ==========================================
+// WINDOW LOAD
+// ==========================================
+
+window.onload = function () {
+
+    // PLAYER NAME
+
+    let nome =
+        document.getElementById("player-name");
+
+    if (nome) {
+
+        let usuario =
+            localStorage.getItem("usuarioLogado");
+
+        nome.innerText = usuario;
+    }
+
+    // PLAYER CLASS
+
+    let classe =
+        localStorage.getItem("classe");
+
+    let classeHTML =
+        document.getElementById("player-class");
+
+    if (classeHTML) {
+
+        classeHTML.innerText =
+            "Classe Principal: " + classe;
+    }
+
+    // CARREGAR TODAS AS RAIDS
+
+    carregarRaid("naxx");
+    carregarRaid("ulduar");
+    carregarRaid("toc");
+    carregarRaid("icc");
+    carregarRaid("ruby");
+};
+
+// ==========================================
+// CARREGAR RAID
+// ==========================================
+
+function carregarRaid(raid) {
+
+    let dados =
+        JSON.parse(localStorage.getItem(raid));
+
+    if (dados) {
+
+        raids[raid] = dados;
+    }
+
+    atualizarRaid(raid);
 }
 
-/* LOGIN BOX */
+// ==========================================
+// SALVAR RAID
+// ==========================================
 
-.login-box {
+function salvarRaid(raid) {
 
-    background: rgba(0,0,0,0.8);
-
-    padding: 35px;
-
-    width: 320px;
-
-    border-radius: 20px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 15px;
-
-    box-shadow: 0px 0px 25px black;
+    localStorage.setItem(
+        raid,
+        JSON.stringify(raids[raid])
+    );
 }
 
-/* INPUTS */
+// ==========================================
+// ATUALIZAR RAID
+// ==========================================
 
-input {
+function atualizarRaid(raid) {
 
-    padding: 14px;
+    atualizarLista(
+        raid + "-tanks",
+        raids[raid].tanks
+    );
 
-    border: none;
+    atualizarLista(
+        raid + "-healers",
+        raids[raid].healers
+    );
 
-    border-radius: 10px;
+    atualizarLista(
+        raid + "-dps",
+        raids[raid].dps
+    );
 
-    font-size: 16px;
+    let vagas =
+        document.getElementById(
+            raid + "-vagas"
+        );
+
+    if (vagas) {
+
+        vagas.innerText =
+            raids[raid].vagas;
+    }
 }
 
-/* BOTÕES */
+// ==========================================
+// ATUALIZAR LISTA
+// ==========================================
 
-button {
+function atualizarLista(id, listaJogadores) {
 
-    padding: 14px;
+    let lista =
+        document.getElementById(id);
 
-    border: none;
+    if (!lista) return;
 
-    border-radius: 10px;
+    lista.innerHTML = "";
 
-    font-size: 16px;
+    for (let jogador of listaJogadores) {
 
-    background-color: darkred;
+        let item =
+            document.createElement("li");
 
-    color: white;
+        item.innerText = jogador;
 
-    cursor: pointer;
-
-    transition: 0.3s;
+        lista.appendChild(item);
+    }
 }
 
-button:hover {
+// ==========================================
+// INSCREVER RAID
+// ==========================================
 
-    background-color: red;
+function inscreverRaid(raid) {
 
-    transform: scale(1.05);
+    // RAID LOTADA
 
-    box-shadow: 0px 0px 15px red;
-}
+    if (raids[raid].vagas >= 10) {
 
-/* MENU */
+        alert("Raid lotada!");
 
-.menu {
+        return;
+    }
 
-    position: absolute;
+    // NOME
 
-    top: 20px;
+    let nome =
+        prompt("Digite seu nome:");
 
-    width: 100%;
+    if (!nome) return;
 
-    display: flex;
+    // IMPEDIR REPETIDOS
 
-    justify-content: center;
-}
+    if (
+        raids[raid].jogadores.includes(nome)
+    ) {
 
-.menu ul {
+        alert("Jogador já inscrito!");
 
-    display: flex;
+        return;
+    }
 
-    gap: 30px;
+    // ROLE
 
-    list-style: none;
+    let role =
+        prompt(
+            "Escolha sua função:\n\nTank\nHealer\nDPS"
+        );
 
-    padding: 15px 30px;
+    if (!role) return;
 
-    background: rgba(0,0,0,0.7);
+    role = role.toLowerCase();
 
-    border-radius: 15px;
-}
+    // ==========================================
+    // TANK
+    // ==========================================
 
-.menu a {
+    if (role === "tank") {
 
-    text-decoration: none;
+        if (
+            raids[raid].tanks.length >= 2
+        ) {
 
-    color: white;
+            alert("Limite de Tanks!");
 
-    font-size: 20px;
+            return;
+        }
 
-    transition: 0.3s;
-}
+        raids[raid].tanks.push(nome);
+    }
 
-.menu a:hover {
+    // ==========================================
+    // HEALER
+    // ==========================================
 
-    color: red;
+    else if (role === "healer") {
 
-    transform: scale(1.1);
-}
+        if (
+            raids[raid].healers.length >= 2
+        ) {
 
-/* CLASSES */
+            alert("Limite de Healers!");
 
-.characters-container {
+            return;
+        }
 
-    padding: 50px;
+        raids[raid].healers.push(nome);
+    }
 
-    text-align: center;
+    // ==========================================
+    // DPS
+    // ==========================================
 
-    color: white;
-}
+    else if (role === "dps") {
 
-.classes {
+        if (
+            raids[raid].dps.length >= 6
+        ) {
 
-    display: flex;
+            alert("Limite de DPS!");
 
-    justify-content: center;
+            return;
+        }
 
-    flex-wrap: wrap;
+        raids[raid].dps.push(nome);
+    }
 
-    gap: 25px;
-}
+    else {
 
-/* CARDS */
+        alert("Função inválida!");
 
-.class-card {
+        return;
+    }
 
-    background: rgba(0,0,0,0.85);
+    // SALVAR JOGADOR
 
-    width: 260px;
+    raids[raid].jogadores.push(nome);
 
-    padding: 25px;
+    // AUMENTAR CONTADOR
 
-    border-radius: 20px;
+    raids[raid].vagas++;
 
-    transition: 0.3s;
-}
+    // ATUALIZAR
 
-.class-card:hover {
+    atualizarRaid(raid);
 
-    transform: translateY(-10px);
+    salvarRaid(raid);
 
-    box-shadow: 0px 0px 25px red;
-}
-
-.class-card img {
-
-    width: 100%;
-
-    height: 180px;
-
-    object-fit: cover;
-
-    border-radius: 15px;
-
-    margin-bottom: 15px;
-}
-
-/* WARRIOR */
-
-.warrior:hover {
-
-    box-shadow: 0px 0px 25px red;
-}
-
-/* MAGE */
-
-.mage:hover {
-
-    box-shadow: 0px 0px 25px cyan;
-}
-
-/* WARLOCK */
-
-.warlock:hover {
-
-    box-shadow: 0px 0px 25px purple;
-}
-
-/* DRUIDA */
-
-.druida:hover {
-
-    box-shadow: 0px 0px 25px limegreen;
-}
-
-/* PALADINO */
-
-.paladino:hover {
-
-    box-shadow: 0px 0px 25px gold;
-}
-
-/* SACERDOTE */
-
-.sacerdote:hover {
-
-    box-shadow: 0px 0px 25px white;
-}
-
-/* SHAMAN */
-
-.shaman:hover {
-
-    box-shadow: 0px 0px 25px dodgerblue;
-}
-
-/* HUNTER */
-
-.hunter:hover {
-
-    box-shadow: 0px 0px 25px greenyellow;
-}
-
-/* ROGUE */
-
-.rogue:hover {
-
-    box-shadow: 0px 0px 25px yellow;
-}
-
-/* DEATH KNIGHT */
-
-.dk:hover {
-
-    box-shadow: 0px 0px 25px deepskyblue;
-}
-
-/* PAGINA RANKING */
-
-.ranking-page {
-
-    background-image: url("https://images.wallpapersden.com/image/download/raid-wow_a21maWeUmZqaraWkpJRmbmdlrWZlbWU.jpg");
-
-    background-size: cover;
-
-    background-position: center;
-
-    background-repeat: no-repeat;
-
-    background-attachment: fixed;
-
-    min-height: 100vh;
-}
-
-/* CONTAINER */
-
-.ranking-container {
-
-    padding: 120px 40px;
-
-    text-align: center;
-
-    color: white;
-}
-
-/* TABELA */
-
-table {
-
-    width: 80%;
-
-    margin: auto;
-
-    border-collapse: collapse;
-
-    background: rgba(0,0,0,0.8);
-
-    border-radius: 15px;
-
-    overflow: hidden;
-
-    box-shadow: 0px 0px 25px black;
-}
-
-/* CABEÇALHO */
-
-th {
-
-    background: darkred;
-
-    padding: 15px;
-
-    font-size: 20px;
-}
-
-/* LINHAS */
-
-td {
-
-    padding: 15px;
-
-    border-bottom: 1px solid rgba(255,255,255,0.2);
-}
-
-/* HOVER */
-
-tr:hover {
-
-    background: rgba(255,0,0,0.2);
-
-    transition: 0.3s;
-}
-
-/* PAGINA GUILDA */
-
-.guild-page {
-
-    background-image: url("https://wowgirl.com.br/wp-content/uploads/2012/05/lorthemar-theron-full.jpg");
-
-    background-size: cover;
-
-    background-position: center;
-
-    background-repeat: no-repeat;
-
-    background-attachment: fixed;
-
-    min-height: 100vh;
-}
-
-/* CONTAINER */
-
-.guild-container {
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    padding: 120px 20px;
-}
-
-/* CAIXA */
-
-.guild-box {
-
-    background: rgba(0,0,0,0.85);
-
-    padding: 40px;
-
-    border-radius: 20px;
-
-    max-width: 800px;
-
-    color: white;
-
-    box-shadow: 0px 0px 25px black;
-}
-
-/* TITULOS */
-
-.guild-box h2 {
-
-    color: red;
-
-    margin-top: 25px;
-}
-
-/* LISTAS */
-
-.guild-box ul {
-
-    padding-left: 20px;
-}
-
-/* BOTAO DISCORD */
-
-.discord-button {
-
-    display: inline-block;
-
-    margin-top: 20px;
-
-    padding: 15px 25px;
-
-    background: #5865F2;
-
-    color: white;
-
-    text-decoration: none;
-
-    border-radius: 10px;
-
-    transition: 0.3s;
-}
-
-.discord-button:hover {
-
-    transform: scale(1.05);
-
-    box-shadow: 0px 0px 20px #5865F2;
-}
-
-/* PAGINA RAIDS */
-
-.raids-page {
-
-    background-image: url("https://www.warcrafttavern.com/wp-content/uploads/2021/11/image-5.jpeg");
-
-    background-size: cover;
-
-    background-position: center;
-
-    background-repeat: no-repeat;
-
-    background-attachment: fixed;
-
-    min-height: 100vh;
-}
-
-/* CONTAINER */
-
-.raids-container {
-
-    padding: 120px 20px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    gap: 30px;
-
-    color: white;
-}
-
-/* RAID CARD */
-
-.raid-card {
-
-    background: rgba(0,0,0,0.85);
-
-    width: 500px;
-
-    padding: 30px;
-
-    border-radius: 20px;
-
-    box-shadow: 0px 0px 25px black;
-
-    transition: 0.3s;
-}
-
-/* HOVER */
-
-.raid-card:hover {
-
-    transform: scale(1.03);
-
-    box-shadow: 0px 0px 25px red;
-}
-
-/* TITULO */
-
-.raid-card h2 {
-
-    color: red;
-}
-
-/* ROSTER */
-
-.roster {
-
-    margin-top: 20px;
-
-    background: rgba(255,255,255,0.05);
-
-    padding: 15px;
-
-    border-radius: 10px;
-}
-
-.roster h3 {
-
-    color: red;
-}
-
-.roster ul {
-
-    padding-left: 20px;
-}
-
-.roster li {
-
-    margin: 5px 0;
-
-    color: #ddd;
-}
-
-/* PAGINA PAINEL */
-
-.panel-page {
-
-    background-image: url("https://external-preview.redd.it/my-150-warcraft-wallpapers-collection-v0-xXsi35DSbAe1EAFjp7kn84DyjGBxOOF3zyqzpynw5w4.jpeg?width=640&crop=smart&auto=webp&s=20c08bbd6b682b3a70b614d89e1071e5573f50d7");
-
-    background-size: cover;
-
-    background-position: center;
-
-    background-repeat: no-repeat;
-
-    background-attachment: fixed;
-
-    min-height: 100vh;
-}
-
-/* CONTAINER */
-
-.panel-container {
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    min-height: 100vh;
-
-    color: white;
-}
-
-/* ==========================================
-   PAINEL USUARIO
-========================================== */
-
-/* BEM VINDO */
-
-.panel-container h1 {
-
-    color: red;
-
-    font-size: 60px;
-
-    text-shadow:
-        0px 0px 10px black,
-        0px 0px 20px darkred;
-}
-
-/* NOME DO PLAYER */
-
-#player-name {
-
-    color: gold;
-
-    font-size: 45px;
-
-    text-shadow:
-        0px 0px 10px black,
-        0px 0px 20px black;
-
-    margin-top: 10px;
-}
-
-/* CLASSE DO PLAYER */
-
-#player-class {
-
-    color: #ffb6d9;
-
-    font-size: 30px;
-
-    text-shadow:
-        0px 0px 10px black,
-        0px 0px 20px black;
-
-    margin-top: 10px;
+    alert("Inscrição realizada!");
 }
