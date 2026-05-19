@@ -120,7 +120,25 @@ function logout() {
 }
 
 // ==========================================
-// PAINEL USUÁRIO
+// RAID ICC
+// ==========================================
+
+let vagasICC = 10;
+
+// LISTAS
+
+let tanks = [];
+
+let healers = [];
+
+let dps = [];
+
+// NOMES REGISTRADOS
+
+let jogadoresRegistrados = [];
+
+// ==========================================
+// WINDOW LOAD
 // ==========================================
 
 window.onload = function () {
@@ -193,24 +211,6 @@ window.onload = function () {
         vagasHTML.innerText = vagasICC;
     }
 };
-
-// ==========================================
-// RAID ICC
-// ==========================================
-
-let vagasICC = 10;
-
-// LISTAS
-
-let tanks = [];
-
-let healers = [];
-
-let dps = [];
-
-// NOMES REGISTRADOS
-
-let jogadoresRegistrados = [];
 
 // ==========================================
 // INSCREVER ICC
@@ -364,10 +364,22 @@ function atualizarLista(id, listaJogadores) {
 }
 
 // ==========================================
-// REMOVER JOGADOR
+// REMOVER JOGADOR (ADM)
 // ==========================================
 
 function removerJogador() {
+
+    let usuario =
+        localStorage.getItem("usuarioLogado");
+
+    // SOMENTE ADM
+
+    if (usuario !== "Leekhan") {
+
+        alert("Apenas ADM pode remover jogadores!");
+
+        return;
+    }
 
     let nome =
         prompt("Digite o nome do jogador:");
