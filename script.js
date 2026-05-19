@@ -4,7 +4,7 @@
 
 // TESTE
 
-alert("script carregado");
+//alert("script carregado");
 
 // ==========================================
 // LOGIN
