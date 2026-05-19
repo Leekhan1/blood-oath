@@ -666,21 +666,18 @@ tr:hover {
 }
 
 /* ==========================================
-   MOBILE RESPONSIVO
+   MOBILE
 ========================================== */
 
 @media screen and (max-width: 768px) {
-
-    body {
-
-        overflow-x: hidden;
-    }
 
     /* MENU */
 
     .menu {
 
         position: relative;
+
+        top: 0;
 
         width: 100%;
 
@@ -693,40 +690,34 @@ tr:hover {
 
     .menu ul {
 
-        width: 92%;
-
         flex-direction: column;
 
         align-items: center;
 
-        gap: 12px;
+        gap: 15px;
 
-        padding: 18px;
+        width: 90%;
 
-        border-radius: 20px;
+        padding: 15px;
     }
 
     .menu a {
 
         font-size: 18px;
-
-        font-weight: bold;
     }
 
     /* TITULOS */
 
     h1 {
 
-        font-size: 38px;
+        font-size: 42px;
 
         text-align: center;
-
-        margin-top: 20px;
 
         line-height: 1.2;
     }
 
-    /* CONTAINER */
+    /* CONTAINERS */
 
     .container,
     .panel-container,
@@ -734,8 +725,6 @@ tr:hover {
     .ranking-container,
     .raids-container,
     .characters-container {
-
-        width: 100%;
 
         padding: 20px 10px;
 
@@ -746,15 +735,11 @@ tr:hover {
 
     .login-box {
 
-        width: 92%;
+        width: 90%;
 
         max-width: 350px;
 
         padding: 25px;
-
-        border-radius: 20px;
-
-        gap: 18px;
     }
 
     input {
@@ -764,8 +749,6 @@ tr:hover {
         box-sizing: border-box;
 
         font-size: 16px;
-
-        padding: 15px;
     }
 
     button {
@@ -773,96 +756,62 @@ tr:hover {
         width: 100%;
 
         font-size: 16px;
-
-        padding: 15px;
-
-        border-radius: 12px;
     }
 
-    /* CARDS */
+    /* CLASSES */
 
     .classes {
 
         flex-direction: column;
 
         align-items: center;
-
-        width: 100%;
     }
 
     .class-card {
 
-        width: 92%;
+        width: 90%;
 
-        max-width: 350px;
-
-        padding: 20px;
-    }
-
-    .class-card img {
-
-        height: 200px;
-
-        object-fit: cover;
+        max-width: 320px;
     }
 
     /* RAIDS */
 
     .raid-card {
 
-        width: 92%;
+        width: 90%;
 
         max-width: 380px;
 
         padding: 20px;
-
-        border-radius: 20px;
     }
 
     .raid-card h2 {
 
         font-size: 28px;
-
-        text-align: center;
     }
 
     .raid-card p {
 
         font-size: 15px;
-
-        line-height: 1.5;
     }
 
     .raid-image {
 
         width: 100%;
 
-        height: 200px;
-
-        object-fit: cover;
+        height: auto;
 
         border-radius: 15px;
-
-        margin-bottom: 15px;
     }
 
     /* ROSTER */
 
     .roster {
 
-        padding: 15px;
-
-        margin-top: 20px;
-    }
-
-    .roster h3 {
-
-        font-size: 20px;
+        overflow-x: auto;
     }
 
     .roster li {
-
-        font-size: 15px;
 
         word-break: break-word;
     }
@@ -873,7 +822,7 @@ tr:hover {
 
         width: 100%;
 
-        font-size: 13px;
+        font-size: 14px;
 
         display: block;
 
@@ -890,16 +839,9 @@ tr:hover {
 
     .guild-box {
 
-        width: 92%;
+        width: 90%;
 
         padding: 20px;
-
-        line-height: 1.6;
-    }
-
-    .guild-box h2 {
-
-        font-size: 28px;
     }
 
     /* PAINEL */
@@ -911,27 +853,16 @@ tr:hover {
 
     .panel-container h1 {
 
-        font-size: 38px;
+        font-size: 40px;
     }
 
     #player-name {
 
         font-size: 30px;
-
-        word-break: break-word;
     }
 
     #player-class {
 
         font-size: 22px;
-    }
-
-    /* IMAGENS */
-
-    img {
-
-        max-width: 100%;
-
-        height: auto;
     }
 }
