@@ -418,3 +418,52 @@ window.irRegistro = irRegistro;
 window.voltarLogin = voltarLogin;
 
 window.inscreverRaid = inscreverRaid;
+
+// ==========================================
+// CANCELAR INSCRIÇÃO
+// ==========================================
+
+function cancelarInscricao(raid) {
+
+    let nome =
+        prompt("Digite seu nome para cancelar:");
+
+    if (!nome) return;
+
+    // REMOVER DAS LISTAS
+
+    raids[raid].tanks =
+        raids[raid].tanks.filter(
+            j => j !== nome
+        );
+
+    raids[raid].healers =
+        raids[raid].healers.filter(
+            j => j !== nome
+        );
+
+    raids[raid].dps =
+        raids[raid].dps.filter(
+            j => j !== nome
+        );
+
+    raids[raid].jogadores =
+        raids[raid].jogadores.filter(
+            j => j !== nome
+        );
+
+    // AUMENTAR VAGAS
+
+    if (raids[raid].vagas >= 10) {
+
+        raids[raid].vagas++;
+    }
+
+    // ATUALIZAR
+
+    atualizarRaid(raid);
+
+    salvarRaid(raid);
+
+    alert("Inscrição cancelada!");
+}
