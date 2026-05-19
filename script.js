@@ -6,6 +6,15 @@
 // LOGIN
 // ==========================================
 
+import {
+    db,
+    ref,
+    set,
+    get,
+    onValue
+}
+from "./firebase.js";
+
 function login() {
 
     let usuario =
