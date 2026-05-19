@@ -2,10 +2,6 @@
 // BLOOD OATH - SCRIPT PRINCIPAL
 // ==========================================
 
-// ==========================================
-// LOGIN
-// ==========================================
-
 import {
     db,
     ref,
@@ -15,7 +11,11 @@ import {
 }
 from "./firebase.js";
 
-function login() {
+// ==========================================
+// LOGIN
+// ==========================================
+
+async function login() {
 
     let usuario =
         document.getElementById("login-user").value;
@@ -23,31 +23,51 @@ function login() {
     let senha =
         document.getElementById("login-pass").value;
 
-    let usuarioSalvo =
-        localStorage.getItem("usuario");
-
-    let senhaSalva =
-        localStorage.getItem("senha");
-
     if (
-        usuario === usuarioSalvo &&
-        senha === senhaSalva
+        usuario === "" ||
+        senha === ""
     ) {
 
-        localStorage.setItem("logado", "true");
+        alert("Preencha todos os campos!");
 
-        localStorage.setItem(
-            "usuarioLogado",
-            usuario
-        );
-
-        window.location.href = "panel.html";
+        return;
     }
 
-    else {
+    let usuarioRef =
+        ref(db, "usuarios/" + usuario);
 
-        alert("Usuário ou senha incorretos!");
+    let snapshot =
+        await get(usuarioRef);
+
+    if (!snapshot.exists()) {
+
+        alert("Usuário não encontrado!");
+
+        return;
     }
+
+    let dados =
+        snapshot.val();
+
+    if (dados.senha !== senha) {
+
+        alert("Senha incorreta!");
+
+        return;
+    }
+
+    localStorage.setItem(
+        "usuarioLogado",
+        usuario
+    );
+
+    localStorage.setItem(
+        "classe",
+        dados.classe
+    );
+
+    window.location.href =
+        "panel.html";
 }
 
 // ==========================================
@@ -56,15 +76,17 @@ function login() {
 
 function irRegistro() {
 
-    window.location.href = "register.html";
+    window.location.href =
+        "register.html";
 }
 
 function voltarLogin() {
 
-    window.location.href = "index.html";
+    window.location.href =
+        "index.html";
 }
 
-function registrar() {
+async function registrar() {
 
     let usuario =
         document.getElementById("register-user").value;
@@ -86,15 +108,30 @@ function registrar() {
         return;
     }
 
-    localStorage.setItem("usuario", usuario);
+    let usuarioRef =
+        ref(db, "usuarios/" + usuario);
 
-    localStorage.setItem("senha", senha);
+    let snapshot =
+        await get(usuarioRef);
 
-    localStorage.setItem("classe", classe);
+    if (snapshot.exists()) {
+
+        alert("Usuário já existe!");
+
+        return;
+    }
+
+    await set(usuarioRef, {
+
+        usuario: usuario,
+        senha: senha,
+        classe: classe
+    });
 
     alert("Conta criada com sucesso!");
 
-    window.location.href = "index.html";
+    window.location.href =
+        "index.html";
 }
 
 // ==========================================
@@ -103,11 +140,16 @@ function registrar() {
 
 function logout() {
 
-    localStorage.removeItem("logado");
+    localStorage.removeItem(
+        "usuarioLogado"
+    );
 
-    localStorage.removeItem("usuarioLogado");
+    localStorage.removeItem(
+        "classe"
+    );
 
-    window.location.href = "index.html";
+    window.location.href =
+        "index.html";
 }
 
 // ==========================================
@@ -171,9 +213,12 @@ window.onload = function () {
     if (nome) {
 
         let usuario =
-            localStorage.getItem("usuarioLogado");
+            localStorage.getItem(
+                "usuarioLogado"
+            );
 
-        nome.innerText = usuario;
+        nome.innerText =
+            usuario || "Aventureiro";
     }
 
     // PLAYER CLASS
@@ -182,15 +227,18 @@ window.onload = function () {
         localStorage.getItem("classe");
 
     let classeHTML =
-        document.getElementById("player-class");
+        document.getElementById(
+            "player-class"
+        );
 
     if (classeHTML) {
 
         classeHTML.innerText =
-            "Classe Principal: " + classe;
+            "Classe Principal: " +
+            (classe || "Nenhuma");
     }
 
-    // CARREGAR TODAS AS RAIDS
+    // CARREGAR RAIDS
 
     carregarRaid("naxx");
     carregarRaid("ulduar");
@@ -200,31 +248,42 @@ window.onload = function () {
 };
 
 // ==========================================
-// CARREGAR RAID
+// CARREGAR RAID FIREBASE
 // ==========================================
 
 function carregarRaid(raid) {
 
-    let dados =
-        JSON.parse(localStorage.getItem(raid));
+    let raidRef =
+        ref(db, "raids/" + raid);
 
-    if (dados) {
+    onValue(raidRef, (snapshot) => {
 
-        raids[raid] = dados;
-    }
+        if (snapshot.exists()) {
 
-    atualizarRaid(raid);
+            raids[raid] =
+                snapshot.val();
+        }
+
+        else {
+
+            set(raidRef, raids[raid]);
+        }
+
+        atualizarRaid(raid);
+    });
 }
 
 // ==========================================
 // SALVAR RAID
 // ==========================================
 
-function salvarRaid(raid) {
+async function salvarRaid(raid) {
 
-    localStorage.setItem(
-        raid,
-        JSON.stringify(raids[raid])
+    await set(
+
+        ref(db, "raids/" + raid),
+
+        raids[raid]
     );
 }
 
@@ -235,17 +294,23 @@ function salvarRaid(raid) {
 function atualizarRaid(raid) {
 
     atualizarLista(
+
         raid + "-tanks",
+
         raids[raid].tanks
     );
 
     atualizarLista(
+
         raid + "-healers",
+
         raids[raid].healers
     );
 
     atualizarLista(
+
         raid + "-dps",
+
         raids[raid].dps
     );
 
@@ -265,7 +330,10 @@ function atualizarRaid(raid) {
 // ATUALIZAR LISTA
 // ==========================================
 
-function atualizarLista(id, listaJogadores) {
+function atualizarLista(
+    id,
+    listaJogadores
+) {
 
     let lista =
         document.getElementById(id);
@@ -274,12 +342,15 @@ function atualizarLista(id, listaJogadores) {
 
     lista.innerHTML = "";
 
-    for (let jogador of listaJogadores) {
+    for (
+        let jogador of listaJogadores
+    ) {
 
         let item =
             document.createElement("li");
 
-        item.innerText = jogador;
+        item.innerText =
+            jogador;
 
         lista.appendChild(item);
     }
@@ -289,36 +360,36 @@ function atualizarLista(id, listaJogadores) {
 // INSCREVER RAID
 // ==========================================
 
-function inscreverRaid(raid) {
+async function inscreverRaid(raid) {
 
-    // RAID LOTADA
-
-    if (raids[raid].vagas >= 10) {
+    if (
+        raids[raid].vagas >= 10
+    ) {
 
         alert("Raid lotada!");
 
         return;
     }
 
-    // NOME
-
     let nome =
-        prompt("Digite seu nome:");
+        prompt(
+            "Digite seu nome:"
+        );
 
     if (!nome) return;
 
-    // IMPEDIR REPETIDOS
-
     if (
-        raids[raid].jogadores.includes(nome)
+        raids[raid]
+        .jogadores
+        .includes(nome)
     ) {
 
-        alert("Jogador já inscrito!");
+        alert(
+            "Jogador já inscrito!"
+        );
 
         return;
     }
-
-    // ROLE
 
     let role =
         prompt(
@@ -327,84 +398,184 @@ function inscreverRaid(raid) {
 
     if (!role) return;
 
-    role = role.toLowerCase();
+    role =
+        role.toLowerCase();
 
-    // ==========================================
     // TANK
-    // ==========================================
 
     if (role === "tank") {
 
         if (
-            raids[raid].tanks.length >= 2
+            raids[raid]
+            .tanks.length >= 2
         ) {
 
-            alert("Limite de Tanks!");
+            alert(
+                "Limite de Tanks!"
+            );
 
             return;
         }
 
-        raids[raid].tanks.push(nome);
+        raids[raid]
+            .tanks
+            .push(nome);
     }
 
-    // ==========================================
     // HEALER
-    // ==========================================
 
-    else if (role === "healer") {
+    else if (
+        role === "healer"
+    ) {
 
         if (
-            raids[raid].healers.length >= 2
+            raids[raid]
+            .healers.length >= 2
         ) {
 
-            alert("Limite de Healers!");
+            alert(
+                "Limite de Healers!"
+            );
 
             return;
         }
 
-        raids[raid].healers.push(nome);
+        raids[raid]
+            .healers
+            .push(nome);
     }
 
-    // ==========================================
     // DPS
-    // ==========================================
 
-    else if (role === "dps") {
+    else if (
+        role === "dps"
+    ) {
 
         if (
-            raids[raid].dps.length >= 6
+            raids[raid]
+            .dps.length >= 6
         ) {
 
-            alert("Limite de DPS!");
+            alert(
+                "Limite de DPS!"
+            );
 
             return;
         }
 
-        raids[raid].dps.push(nome);
+        raids[raid]
+            .dps
+            .push(nome);
     }
 
     else {
 
-        alert("Função inválida!");
+        alert(
+            "Função inválida!"
+        );
 
         return;
     }
 
-    // SALVAR JOGADOR
-
-    raids[raid].jogadores.push(nome);
-
-    // AUMENTAR CONTADOR
+    raids[raid]
+        .jogadores
+        .push(nome);
 
     raids[raid].vagas++;
 
-    // ATUALIZAR
+    await salvarRaid(raid);
 
-    atualizarRaid(raid);
+    alert(
+        "Inscrição realizada!"
+    );
+}
 
-    salvarRaid(raid);
+// ==========================================
+// CANCELAR INSCRIÇÃO
+// ==========================================
 
-    alert("Inscrição realizada!");
+async function cancelarInscricao(raid) {
+
+    let nome =
+        prompt(
+            "Digite seu nome:"
+        );
+
+    if (!nome) return;
+
+    let encontrou = false;
+
+    // REMOVER
+
+    if (
+        raids[raid]
+        .tanks.includes(nome)
+    ) {
+
+        raids[raid].tanks =
+            raids[raid]
+            .tanks.filter(
+                j => j !== nome
+            );
+
+        encontrou = true;
+    }
+
+    if (
+        raids[raid]
+        .healers.includes(nome)
+    ) {
+
+        raids[raid].healers =
+            raids[raid]
+            .healers.filter(
+                j => j !== nome
+            );
+
+        encontrou = true;
+    }
+
+    if (
+        raids[raid]
+        .dps.includes(nome)
+    ) {
+
+        raids[raid].dps =
+            raids[raid]
+            .dps.filter(
+                j => j !== nome
+            );
+
+        encontrou = true;
+    }
+
+    raids[raid].jogadores =
+        raids[raid]
+        .jogadores.filter(
+            j => j !== nome
+        );
+
+    if (!encontrou) {
+
+        alert(
+            "Jogador não encontrado!"
+        );
+
+        return;
+    }
+
+    if (
+        raids[raid].vagas > 0
+    ) {
+
+        raids[raid].vagas--;
+    }
+
+    await salvarRaid(raid);
+
+    alert(
+        "Inscrição cancelada!"
+    );
 }
 
 // ==========================================
@@ -413,64 +584,20 @@ function inscreverRaid(raid) {
 
 window.login = login;
 
-window.irRegistro = irRegistro;
+window.irRegistro =
+    irRegistro;
 
-window.voltarLogin = voltarLogin;
+window.voltarLogin =
+    voltarLogin;
 
-window.registrar = registrar;
+window.registrar =
+    registrar;
 
-window.logout = logout;
+window.logout =
+    logout;
 
-window.inscreverRaid = inscreverRaid;
+window.inscreverRaid =
+    inscreverRaid;
 
-window.cancelarInscricao = cancelarInscricao;
-
-
-// ==========================================
-// CANCELAR INSCRIÇÃO
-// ==========================================
-
-function cancelarInscricao(raid) {
-
-    let nome =
-        prompt("Digite seu nome para cancelar:");
-
-    if (!nome) return;
-
-    // REMOVER DAS LISTAS
-
-    raids[raid].tanks =
-        raids[raid].tanks.filter(
-            j => j !== nome
-        );
-
-    raids[raid].healers =
-        raids[raid].healers.filter(
-            j => j !== nome
-        );
-
-    raids[raid].dps =
-        raids[raid].dps.filter(
-            j => j !== nome
-        );
-
-    raids[raid].jogadores =
-        raids[raid].jogadores.filter(
-            j => j !== nome
-        );
-
-    // AUMENTAR VAGAS
-
-    if (raids[raid].vagas >= 10) {
-
-        raids[raid].vagas++;
-    }
-
-    // ATUALIZAR
-
-    atualizarRaid(raid);
-
-    salvarRaid(raid);
-
-    alert("Inscrição cancelada!");
-}
+window.cancelarInscricao =
+    cancelarInscricao;
