@@ -24,9 +24,11 @@
         <li><a href="guilda.html">Guilda</a></li>
         <li><a href="raids.html">Raids</a></li>
         <li><a href="ranking.html">Ranking</a></li>
-        <li><a href="https://discord.gg/ajs7XKDKUc" target="_blank">
-            Discord
-        </a>
+
+        <li>
+            <a href="https://discord.gg/ajs7XKDKUc" target="_blank">
+                Discord
+            </a>
         </li>
 
     </ul>
@@ -37,61 +39,33 @@
 
     <h1>Agenda de Raids</h1>
 
-    <!-- RUBY SANCTUM -->
+    <!-- NAXXRAMAS -->
 
     <div class="raid-card">
 
         <img class="raid-image"
-             src="https://static.wikia.nocookie.net/wowpedia/images/8/86/Rs02.jpg/revision/latest/scale-to-width-down/250?cb=20100622214115">
+             src="https://epiccarry.com/wp-content/uploads/2025/03/wow-classic-era-naxxramas-boost.webp">
 
-        <h2>Ruby Sanctum</h2>
+        <h2>Naxxramas</h2>
 
-        <p><strong>Boss Final:</strong> Halion</p>
+        <p><strong>Boss Final:</strong> Kel'Thuzad</p>
 
-        <p><strong>Dia:</strong> off </p>
+        <p><strong>Dia:</strong> Domingo</p>
 
-        <p><strong>Horário:</strong> a ajustar</p>
-
-        <p><strong>Vagas:</strong> 0/10</p>
-
-        <p><strong>Necessário:</strong> 2 Tanks • 2 Healer• 6 DPS</p>
-
-        <p><strong>Loot:</strong> Main Spec</p>
-
-        <p><strong>Progresso:</strong> 0/4 Normal Mode</p>
-
-        <button>Inscrever-se</button>
-
-    </div>
-
-    <!-- ICC -->
-
-    <div class="raid-card">
-
-        <img class="raid-image"
-             src="https://static.wikia.nocookie.net/wowpedia/images/1/13/The_Lich_King_HD.png/revision/latest/scale-to-width-down/200?cb=20181117185037">
-
-        <h2>Icecrown Citadel</h2>
-
-        <p><strong>Boss Final:</strong> Lich King</p>
-
-        <p><strong>Dia:</strong> Sexta-feira</p>
-
-        <p><strong>Horário:</strong> 21:00</p>
+        <p><strong>Horário:</strong> 17:30</p>
 
         <p>
             <strong>Vagas:</strong>
-
-            <span id="icc-vagas">0</span>/10
+            <span id="naxx-vagas">10</span>/10
         </p>
 
-        <p><strong>Necessário:</strong> 2 Tanks • 2 Healer• 6 DPS</p>
+        <p><strong>Necessário:</strong> 2 Tanks • 2 Healers • 6 DPS</p>
 
         <p><strong>Loot:</strong> Main Spec</p>
 
-        <p><strong>Progresso:</strong> 0/12 Normal Mode</p>
+        <p><strong>Progresso:</strong> Full Clear</p>
 
-        <button onclick="inscreverICC()">
+        <button onclick="inscreverRaid('naxx')">
 
             Inscrever-se
 
@@ -100,16 +74,60 @@
         <div class="roster">
 
             <h3>Tanks</h3>
-
-            <ul id="icc-tanks"></ul>
+            <ul id="naxx-tanks"></ul>
 
             <h3>Healers</h3>
-
-            <ul id="icc-healers"></ul>
+            <ul id="naxx-healers"></ul>
 
             <h3>DPS</h3>
+            <ul id="naxx-dps"></ul>
 
-            <ul id="icc-dps"></ul>
+        </div>
+
+    </div>
+
+    <!-- ULDUAR -->
+
+    <div class="raid-card">
+
+        <img class="raid-image"
+             src="https://gamingcy.com/image/cache/catalog/ClassicWotLK/Raids/Ulduar1-500x500.jpg">
+
+        <h2>Ulduar</h2>
+
+        <p><strong>Boss Final:</strong> Yogg-Saron</p>
+
+        <p><strong>Dia:</strong> Sábado</p>
+
+        <p><strong>Horário:</strong> 19:00</p>
+
+        <p>
+            <strong>Vagas:</strong>
+            <span id="ulduar-vagas">10</span>/10
+        </p>
+
+        <p><strong>Necessário:</strong> 2 Tanks • 2 Healers • 6 DPS</p>
+
+        <p><strong>Loot:</strong> Main Spec</p>
+
+        <p><strong>Progresso:</strong> 0/14</p>
+
+        <button onclick="inscreverRaid('ulduar')">
+
+            Inscrever-se
+
+        </button>
+
+        <div class="roster">
+
+            <h3>Tanks</h3>
+            <ul id="ulduar-tanks"></ul>
+
+            <h3>Healers</h3>
+            <ul id="ulduar-healers"></ul>
+
+            <h3>DPS</h3>
+            <ul id="ulduar-dps"></ul>
 
         </div>
 
@@ -130,71 +148,133 @@
 
         <p><strong>Horário:</strong> 19:00</p>
 
-        <p><strong>Vagas:</strong> 0/10</p>
+        <p>
+            <strong>Vagas:</strong>
+            <span id="toc-vagas">10</span>/10
+        </p>
 
-        <p><strong>Necessário:</strong> 2 Tanks • 2 Healer• 6 DPS</p>
+        <p><strong>Necessário:</strong> 2 Tanks • 2 Healers • 6 DPS</p>
 
         <p><strong>Loot:</strong> Main Spec</p>
 
         <p><strong>Progresso:</strong> 0/5 Normal Mode</p>
 
-        <button>Inscrever-se</button>
+        <button onclick="inscreverRaid('toc')">
+
+            Inscrever-se
+
+        </button>
+
+        <div class="roster">
+
+            <h3>Tanks</h3>
+            <ul id="toc-tanks"></ul>
+
+            <h3>Healers</h3>
+            <ul id="toc-healers"></ul>
+
+            <h3>DPS</h3>
+            <ul id="toc-dps"></ul>
+
+        </div>
 
     </div>
 
-    <!-- ULDUAR -->
+    <!-- ICC -->
 
     <div class="raid-card">
 
         <img class="raid-image"
-             src="https://gamingcy.com/image/cache/catalog/ClassicWotLK/Raids/Ulduar1-500x500.jpg">
+             src="https://static.wikia.nocookie.net/wowpedia/images/1/13/The_Lich_King_HD.png/revision/latest/scale-to-width-down/200?cb=20181117185037">
 
-        <h2>Ulduar</h2>
+        <h2>Icecrown Citadel</h2>
 
-        <p><strong>Boss Final:</strong> Yogg-Saron</p>
+        <p><strong>Boss Final:</strong> Lich King</p>
 
-        <p><strong>Dia:</strong> Sábado</p>
+        <p><strong>Dia:</strong> Sexta-feira</p>
 
-        <p><strong>Horário:</strong> 19:00</p>
+        <p><strong>Horário:</strong> 21:00</p>
 
-        <p><strong>Vagas:</strong> 0/10</p>
+        <p>
+            <strong>Vagas:</strong>
+            <span id="icc-vagas">10</span>/10
+        </p>
 
-        <p><strong>Necessário:</strong> 2 Tanks • 2 Healer• 6 DPS</p>
-
-        <p><strong>Loot:</strong> Mian Spec</p>
-
-        <p><strong>Progresso:</strong> 0/14</p>
-
-        <button>Inscrever-se</button>
-
-    </div>
-
-    <!-- NAXX -->
-
-    <div class="raid-card">
-
-        <img class="raid-image"
-             src="https://epiccarry.com/wp-content/uploads/2025/03/wow-classic-era-naxxramas-boost.webp">
-
-        <h2>Naxxramas</h2>
-
-        <p><strong>Boss Final:</strong> Kel'Thuzad</p>
-
-        <p><strong>Dia:</strong> Domingo</p>
-
-        <p><strong>Horário:</strong> 17:30</p>
-
-        <p><strong>Vagas:</strong> 0/10</p>
-
-        <p><strong>Necessário:</strong>2 Tanks • 2 Healer• 6 DPS</p>
+        <p><strong>Necessário:</strong> 2 Tanks • 2 Healers • 6 DPS</p>
 
         <p><strong>Loot:</strong> Main Spec</p>
 
-        <p><strong>Progresso:</strong> Full Clear</p>
+        <p><strong>Progresso:</strong> 0/12 Normal Mode</p>
 
-        <button>Inscrever-se</button>
+        <button onclick="inscreverRaid('icc')">
+
+            Inscrever-se
+
+        </button>
+
+        <div class="roster">
+
+            <h3>Tanks</h3>
+            <ul id="icc-tanks"></ul>
+
+            <h3>Healers</h3>
+            <ul id="icc-healers"></ul>
+
+            <h3>DPS</h3>
+            <ul id="icc-dps"></ul>
+
+        </div>
 
     </div>
+
+    <!-- RUBY SANCTUM -->
+
+    <div class="raid-card">
+
+        <img class="raid-image"
+             src="https://static.wikia.nocookie.net/wowpedia/images/8/86/Rs02.jpg/revision/latest/scale-to-width-down/250?cb=20100622214115">
+
+        <h2>Ruby Sanctum</h2>
+
+        <p><strong>Boss Final:</strong> Halion</p>
+
+        <p><strong>Dia:</strong> Off</p>
+
+        <p><strong>Horário:</strong> A ajustar</p>
+
+        <p>
+            <strong>Vagas:</strong>
+            <span id="ruby-vagas">10</span>/10
+        </p>
+
+        <p><strong>Necessário:</strong> 2 Tanks • 2 Healers • 6 DPS</p>
+
+        <p><strong>Loot:</strong> Main Spec</p>
+
+        <p><strong>Progresso:</strong> 0/4 Normal Mode</p>
+
+        <button onclick="inscreverRaid('ruby')">
+
+            Inscrever-se
+
+        </button>
+
+        <div class="roster">
+
+            <h3>Tanks</h3>
+            <ul id="ruby-tanks"></ul>
+
+            <h3>Healers</h3>
+            <ul id="ruby-healers"></ul>
+
+            <h3>DPS</h3>
+            <ul id="ruby-dps"></ul>
+
+        </div>
+
+    </div>
+
+</div>
 
 <script src="script.js"></script>
 
