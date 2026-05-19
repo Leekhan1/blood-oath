@@ -407,17 +407,24 @@ function inscreverRaid(raid) {
     alert("Inscrição realizada!");
 }
 
+// ==========================================
+// GLOBAL FUNCTIONS
+// ==========================================
+
 window.login = login;
-
-window.registrar = registrar;
-
-window.logout = logout;
 
 window.irRegistro = irRegistro;
 
 window.voltarLogin = voltarLogin;
 
+window.registrar = registrar;
+
+window.logout = logout;
+
 window.inscreverRaid = inscreverRaid;
+
+window.cancelarInscricao = cancelarInscricao;
+
 
 // ==========================================
 // CANCELAR INSCRIÇÃO
