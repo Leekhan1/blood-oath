@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Blood Oath - Raids</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="raids-page">
+
+<nav class="menu">
+
+    <ul>
+
+        <li><a href="index.html">Home</a></li>
+        <li><a href="panel.html">Painel</a></li>
+        <li><a href="guilda.html">Guilda</a></li>
+        <li><a href="raids.html">Raids</a></li>
+        <li><a href="ranking.html">Ranking</a></li>
+        <li><a href="https://discord.gg/ajs7XKDKUc" target="_blank">
+            Discord
+        </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+<div class="raids-container">
+
+    <h1>Agenda de Raids</h1>
+
+    <!-- RUBY SANCTUM -->
+
+    <div class="raid-card">
+
+        <img class="raid-image"
+             src="https://static.wikia.nocookie.net/wowpedia/images/8/86/Rs02.jpg/revision/latest/scale-to-width-down/250?cb=20100622214115">
+
+        <h2>Ruby Sanctum</h2>
+
+        <p><strong>Boss Final:</strong> Halion</p>
+
+        <p><strong>Dia:</strong> off </p>
+
+        <p><strong>Horário:</strong> a ajustar</p>
+
+        <p><strong>Vagas:</strong> 0/10</p>
+
+        <p><strong>Necessário:</strong> 2 Tanks • 2 Healer• 6 DPS</p>
+
+        <p><strong>Loot:</strong> Main Spec</p>
+
+        <p><strong>Progresso:</strong> 0/4 Normal Mode</p>
+
+        <button>Inscrever-se</button>
+
+    </div>
+
+    <!-- ICC -->
+
+    <div class="raid-card">
+
+        <img class="raid-image"
+             src="https://static.wikia.nocookie.net/wowpedia/images/1/13/The_Lich_King_HD.png/revision/latest/scale-to-width-down/200?cb=20181117185037">
+
+        <h2>Icecrown Citadel</h2>
+
+        <p><strong>Boss Final:</strong> Lich King</p>
+
+        <p><strong>Dia:</strong> Sexta-feira</p>
+
+        <p><strong>Horário:</strong> 21:00</p>
+
+        <p>
+            <strong>Vagas:</strong>
+
+            <span id="icc-vagas">0</span>/10
+        </p>
+
+        <p><strong>Necessário:</strong> 2 Tanks • 2 Healer• 6 DPS</p>
+
+        <p><strong>Loot:</strong> Main Spec</p>
+
+        <p><strong>Progresso:</strong> 0/12 Normal Mode</p>
+
+        <button onclick="inscreverICC()">
+
+            Inscrever-se
+
+        </button>
+
+        <div class="roster">
+
+            <h3>Tanks</h3>
+
+            <ul id="icc-tanks"></ul>
+
+            <button onclick="removerJogador()">
+
+                Remover Jogador
+
+            </button>
+
+            <h3>Healers</h3>
+
+            <ul id="icc-healers"></ul>
+
+            <h3>DPS</h3>
+
+            <ul id="icc-dps"></ul>
+
+        </div>
+
+    </div>
+
+    <!-- TRIAL OF THE CRUSADER -->
+
+    <div class="raid-card">
+
+        <img class="raid-image"
+             src="https://static.wikia.nocookie.net/wowpedia/images/5/56/Trial_of_the_Crusader_loading_screen.jpg/revision/latest/scale-to-width-down/221?cb=20180320113845">
+
+        <h2>Trial of the Crusader</h2>
+
+        <p><strong>Boss Final:</strong> Anub'arak</p>
+
+        <p><strong>Dia:</strong> Sexta-feira</p>
+
+        <p><strong>Horário:</strong> 19:00</p>
+
+        <p><strong>Vagas:</strong> 0/10</p>
+
+        <p><strong>Necessário:</strong> 2 Tanks • 2 Healer• 6 DPS</p>
+
+        <p><strong>Loot:</strong> Main Spec</p>
+
+        <p><strong>Progresso:</strong> 0/5 Normal Mode</p>
+
+        <button>Inscrever-se</button>
+
+    </div>
+
+    <!-- ULDUAR -->
+
+    <div class="raid-card">
+
+        <img class="raid-image"
+             src="https://gamingcy.com/image/cache/catalog/ClassicWotLK/Raids/Ulduar1-500x500.jpg">
+
+        <h2>Ulduar</h2>
+
+        <p><strong>Boss Final:</strong> Yogg-Saron</p>
+
+        <p><strong>Dia:</strong> Sábado</p>
+
+        <p><strong>Horário:</strong> 19:00</p>
+
+        <p><strong>Vagas:</strong> 0/10</p>
+
+        <p><strong>Necessário:</strong> 2 Tanks • 2 Healer• 6 DPS</p>
+
+        <p><strong>Loot:</strong> Mian Spec</p>
+
+        <p><strong>Progresso:</strong> 0/14</p>
+
+        <button>Inscrever-se</button>
+
+    </div>
+
+    <!-- NAXX -->
+
+    <div class="raid-card">
+
+        <img class="raid-image"
+             src="https://epiccarry.com/wp-content/uploads/2025/03/wow-classic-era-naxxramas-boost.webp">
+
+        <h2>Naxxramas</h2>
+
+        <p><strong>Boss Final:</strong> Kel'Thuzad</p>
+
+        <p><strong>Dia:</strong> Domingo</p>
+
+        <p><strong>Horário:</strong> 17:30</p>
+
+        <p><strong>Vagas:</strong> 0/10</p>
+
+        <p><strong>Necessário:</strong>2 Tanks • 2 Healer• 6 DPS</p>
+
+        <p><strong>Loot:</strong> Main Spec</p>
+
+        <p><strong>Progresso:</strong> Full Clear</p>
+
+        <button>Inscrever-se</button>
+
+    </div>
+
+</div>
