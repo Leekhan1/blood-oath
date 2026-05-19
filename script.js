@@ -406,3 +406,15 @@ function inscreverRaid(raid) {
 
     alert("Inscrição realizada!");
 }
+
+window.login = login;
+
+window.registrar = registrar;
+
+window.logout = logout;
+
+window.irRegistro = irRegistro;
+
+window.voltarLogin = voltarLogin;
+
+window.inscreverRaid = inscreverRaid;
